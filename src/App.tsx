@@ -7,16 +7,22 @@ const rollbarConfig = {
   captureUncaught: true,
   captureUnhandledRejections: true,
   environment: 'production',
-  server: {
-    root: "http://example.com/",
-    branch: "main"
-  },
-  code_version: "0.13.7",
   payload: {
     person: {
       id: 117,
       email: "chief@abc.com",
       username: "john-doe"
+    },
+    server: {
+      root: "../../",
+      branch: "main"
+    },
+    client: {
+      javascript: {
+        code_version: 'main',
+        source_map_enabled: true,
+        guess_uncaught_frames: true
+      }
     }
   },
   // Code here to determine whether or not to send the payload
@@ -35,8 +41,7 @@ const rollbarConfig = {
 function refreshPage(){ window.parent.location = window.parent.location.href; }
 
 function App() {
-  function FallbackUI({error, resetErrorBoundary}) {
-    console.log("Fallback")
+  var FallbackUI = function({error}) {
     return (
       <div>
         <p>Error: {error.message}</p>
@@ -46,7 +51,7 @@ function App() {
       </div>
     )
   }
-
+  
   const MyComponent = () => {
     var pick = Math.floor(Math.random()*10)
     if (pick > 5) {
